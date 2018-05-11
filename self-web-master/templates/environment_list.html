@@ -1,0 +1,190 @@
+{% extends 'base.html' %} {% block title %}setting_list{% endblock %} {% block content %}
+<div class="am-cf am-padding">
+    <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">配置详情</strong> / <small>setting_list</small></div>
+</div>
+<div class="am-cf am-padding">
+    <div class="am-fl am-cf">
+        配置名称：{{ environment_name }}
+    </div>
+</div>
+<div class="am-tabs am-margin" data-am-tabs>
+    <ul class="am-tabs-nav am-nav am-nav-tabs">
+        <li class="am-active"><a href="#tab1">资源列表</a></li>
+        <li><a href="#tab2">系统属性列表</a></li>
+        <li><a href="#tab3">目标列表</a></li>
+        <li><a href="#tab4">软件特征列表</a></li>
+    </ul>
+    <div class="am-tabs-bd">
+        <div class="am-tab-panel am-fade am-in am-active" id="tab1">
+            <div id="environment_tree"></div>
+            <script>
+            var environment_data = {{ show_environment|safe }};
+            $(function() {
+                $('#environment_tree').tree({
+                    data: environment_data
+                });
+            });
+            </script>
+            <div class="am-margin">
+                <form method="post" action="/add_res_from_file" name="fileform" id="fileform" enctype="multipart/form-data" class="am-form">
+                    <div class="am-form-group am-form-file">
+                        <button type="button" class="am-btn am-btn-default am-btn-xs">
+                            <i class="am-icon-cloud-upload"></i> 点击选择文件</button>
+                        <input type="file" name="res_file" id="res_file" value="选择" onSelect="this.fileform.submit();" class="am-form-field" required/>
+                    </div>
+                    <div id="res-file-list"></div>
+                    <script>
+                    $(function() {
+                        $('#res_file').on('change', function() {
+                            var fileNames = '';
+                            $.each(this.files, function() {
+                                fileNames += '<p>' + this.name + '</p> ';
+                            });
+                            $('#res-file-list').html(fileNames);
+                        });
+                    });
+                    </script>
+                    <div class="am-cf ">
+                        <input type="submit" name="submit" value="上传" class="am-btn am-btn-secondary am-btn-xs " />
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="am-tab-panel am-fade am-in am-active" id="tab2">
+            <div id="property_tree"></div>
+            <script>
+            var property_data = {{ show_property|safe }};
+            $(function() {
+                $('#property_tree').tree({
+                    data: property_data
+                });
+            });
+            </script>
+            <div class="am-margin">
+                <form method="post" action="/add_property_from_file" name="fileform" id="fileform" enctype="multipart/form-data" class="am-form">
+                    <div class="am-form-group am-form-file">
+                        <button type="button" class="am-btn am-btn-default am-btn-xs">
+                            <i class="am-icon-cloud-upload"></i> 点击选择文件</button>
+                        <input type="file" name="property_file" id="property_file" value="选择" onSelect="this.fileform.submit();" class="am-form-field" required/>
+                    </div>
+                    <div id="property-file-list"></div>
+                    <script>
+                    $(function() {
+                        $('#property_file').on('change', function() {
+                            var fileNames = '';
+                            $.each(this.files, function() {
+                                fileNames += '<p>' + this.name + '</p> ';
+                            });
+                            $('#property-file-list').html(fileNames);
+                        });
+                    });
+                    </script>
+                    <div class="am-cf ">
+                        <input type="submit" name="submit" value="上传" class="am-btn am-btn-secondary am-btn-xs " />
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="am-tab-panel am-fade am-in am-active" id="tab3">
+            <div id="goal_tree"></div>
+            <script>
+            var goal_data = {{ show_goal|safe }};
+            $(function() {
+                $('#goal_tree').tree({
+                    data: goal_data
+                });
+            });
+            </script>
+            <div class="am-margin">
+                <form method="post" action="/add_goal_from_file" name="fileform" id="fileform" enctype="multipart/form-data" class="am-form">
+                    <div class="am-form-group am-form-file">
+                        <button type="button" class="am-btn am-btn-default am-btn-xs">
+                            <i class="am-icon-cloud-upload"></i> 点击选择文件</button>
+                        <input type="file" name="goal_file" id="goal_file" value="选择" onSelect="this.fileform.submit();" class="am-form-field" required/>
+                    </div>
+                    <div id="goal-file-list"></div>
+                    <script>
+                    $(function() {
+                        $('#goal_file').on('change', function() {
+                            var fileNames = '';
+                            $.each(this.files, function() {
+                                fileNames += '<p>' + this.name + '</p> ';
+                            });
+                            $('#goal-file-list').html(fileNames);
+                        });
+                    });
+                    </script>
+                    <div class="am-cf ">
+                        <input type="submit" name="submit" value="上传" class="am-btn am-btn-secondary am-btn-xs " />
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="am-tab-panel am-fade am-in am-active" id="tab4">
+            <div id="software_tree"></div>
+            <script>
+            var software_data = {{ show_software|safe }};
+            $(function() {
+                $('#software_tree').tree({
+                    data: software_data
+                });
+            });
+            </script>
+            <div class="am-margin">
+                <form method="post" action="/add_software_from_file" name="fileform" id="fileform" enctype="multipart/form-data" class="am-form">
+                    <div class="am-form-group am-form-file">
+                        <button type="button" class="am-btn am-btn-default am-btn-xs">
+                            <i class="am-icon-cloud-upload"></i> 点击选择文件</button>
+                        <input type="file" name="software_file" id="software_file" value="选择" onSelect="this.fileform.submit();" class="am-form-field" required/>
+                    </div>
+                    <div id="software-file-list"></div>
+                    <script>
+                    $(function() {
+                        $('#software_file').on('change', function() {
+                            var fileNames = '';
+                            $.each(this.files, function() {
+                                fileNames += '<p>' + this.name + '</p> ';
+                            });
+                            $('#software-file-list').html(fileNames);
+                        });
+                    });
+                    </script>
+                    <div class="am-cf ">
+                        <input type="submit" name="submit" value="上传" class="am-btn am-btn-secondary am-btn-xs " />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <input type="button" onclick="save_config()" value="确认">
+</div>
+<script type="text/javascript">
+    function save_config(){
+        var r=confirm("保存配置？");
+        if (r==true)
+        {
+            var xmlhttp;
+            if (window.XMLHttpRequest)
+            {// code for IE7+, Firefox, Chrome, Opera, Safari
+                xmlhttp=new XMLHttpRequest();
+            }
+            else
+            {// code for IE6, IE5
+                xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            xmlhttp.onreadystatechange=function()
+            {
+                if (xmlhttp.readyState==4 && xmlhttp.status==200)
+                {
+                    alert(xmlhttp.responseText);
+                }
+            }
+            xmlhttp.open("GET","/save_config",true);
+            xmlhttp.send();
+        }
+        window.location="/runtime_main";
+    }
+</script>
+{% endblock %}

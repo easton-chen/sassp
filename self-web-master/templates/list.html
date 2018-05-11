@@ -1,0 +1,120 @@
+{% extends 'base.html' %} {% block title %}list{% endblock %} {% block content %}
+<div class="am-cf am-padding">
+    <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">详情列表</strong> / <small>list</small></div>
+</div>
+<div class="am-form-group am-padding">
+	<label for="doc-ipt-email-1">Clock</label>
+	<input type="email" class="" id="doc-ipt-email-1", value="{{ clock }}">
+</div>
+<div id="test">
+    test text
+</div>
+<div class="am-tabs am-margin" data-am-tabs>
+    <ul class="am-tabs-nav am-nav am-nav-tabs">
+        <li class="am-active"><a href="#tab1">资源列表</a></li>
+        <li class="am-active"><a href="#tab2">property列表</a></li>
+        <li><a href="#tab3">目标列表</a></li>
+        <li><a href="#tab4">软件列表</a></li>
+    </ul>
+    <div class="am-tabs-bd">
+        <div class="am-tab-panel am-fade am-in am-active" id="tab1">
+            <table class="am-table am-table-striped am-table-hover table-main">
+                <thead>
+                    <tr>
+                        <th class="table-title">名称</th>
+                        <th class="table-type">取值</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for name,value in resources.iteritems() %}
+                        <tr>
+                            <td><a href="#">{{ name }}</a></td>
+                            <td>{{ value }}</td>
+                        </tr>
+                    {% endfor %}
+{#                    <tr>#}
+{#                        <td>#}
+{#                            <input type="checkbox" />#}
+{#                        </td>#}
+{#                        <td>1</td>#}
+{#                        <td><a href="#">Business management</a></td>#}
+{#                        <td>default</td>#}
+{#                        <td class="am-hide-sm-only">测试1号</td>#}
+{#                        <td class="am-hide-sm-only">2014年9月4日 7:28:47</td>#}
+{#                        <td>#}
+{#                            <div class="am-btn-toolbar">#}
+{#                                <div class="am-btn-group am-btn-group-xs">#}
+{#                                    <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-pencil-square-o"></span> 编辑</button>#}
+{#                                    <button class="am-btn am-btn-default am-btn-xs am-hide-sm-only"><span class="am-icon-copy"></span> 复制</button>#}
+{#                                    <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-trash-o"></span> 删除</button>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </td>#}
+{#                    </tr>#}
+
+                </tbody>
+            </table>
+        </div>
+        <div class="am-tab-panel am-fade am-in am-active" id="tab2">
+            <table class="am-table am-table-striped am-table-hover table-main">
+                <thead>
+                    <tr>
+                        <th class="table-title">名称</th>
+                        <th class="table-type">取值</th>        
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for name,value in property.iteritems() %}
+                        <tr>
+                            <td><a href="#">{{ name }}</a></td>
+                            <td>{{ value }}</td>
+                        </tr>
+                    {% endfor %}
+                   
+                </tbody>
+            </table>
+        </div>
+        <div class="am-tab-panel am-fade am-in" id="tab3">
+            <table class="am-table am-table-striped am-table-hover table-main">
+                <thead>
+                    <tr>
+                        <th class="table-title">名称</th>
+                        <th class="table-type">取值</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for name,value in goal.iteritems() %}
+                        <tr>
+                            <td><a href="#">{{ name }}</a></td>
+                            <td>{{ value }}</td>
+                        </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+        <div class="am-tab-panel am-fade am-in" id="tab4">
+            <table class="am-table am-table-striped am-table-hover table-main">
+                <thead>
+                    <tr>
+                        <th class="table-title">名称</th>
+                        <th class="table-type">取值</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for name,value in software.iteritems() %}
+                        <tr>
+                            <td><a href="#">{{ name }}</a></td>
+                            <td>{{ value }}</td>
+                        </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+    <script>
+        client_update();
+    </script>
+{% endblock %}

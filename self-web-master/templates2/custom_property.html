@@ -1,0 +1,37 @@
+{% extends 'base.html' %} {% block title %}custom_property{% endblock %} {% block content %}
+<div class="am-cf am-padding">
+    <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">property定制</strong> / <small>custom_property</small></div>
+</div>
+<div class="am-panel am-panel-default am-margin">
+    <div class="am-panel-bd am-in">
+        <form class="am-form" method="post" action="{{ url_for('op_add_res') }}" id="res_form">
+            <div class="am-g am-margin-top">
+                <strong>environment: <span id="res_environment">{{ pre_res_environment }}</span></strong>
+            </div>
+            <div class="am-g am-margin-top">
+                <div class="am-u-sm-6">
+                    <textarea class="" rows="12" id="doc-ta-1"></textarea>
+                </div>
+                <div class="am-u-sm-6">
+                    实例：
+                    <pre>{
+    "property":[
+        {"name":"brightness","initial":0},
+        {"name":"humidity","initial":0},
+        {"name":"airquality","initial":0},
+        {"name":"volume","initial":0},
+        {"name":"power","initial":0},
+        {"name":"temperature","initial":0}
+    ]
+}
+                    </pre>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class=" am-margin">
+    <button type="submit" class="am-btn am-btn-primary am-btn-xs" onclick="add_res()">提交保存</button>
+    <button type="submit" class="am-btn am-btn-primary am-btn-xs" onclick="jump_list(res_environment.innerText)">放弃保存</button>
+</div>
+{% endblock %}

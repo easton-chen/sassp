@@ -1,0 +1,8 @@
+{
+    "id":"001",
+    "type":"A",
+    "condition":"Res[aircondition.mode].value==\'cool\' ",
+    "action":"Capability.set_value(\'aircondition.power\',1);Capability.set_value(\'window\',0);Capability.set_value(\'heater.power\',0)"
+}
+
+
