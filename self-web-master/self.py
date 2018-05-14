@@ -44,16 +44,18 @@ show_property = []
 show_environment = []
 current_user = ''
 file_path = {}
+password = "******"
 
 @app.route('/')
 @app.route('/environment_main')
 def view_environment_main():
     all_config_file = []
+
     if(current_user != ''):
         '''
         pymysql.connect(host,user,password,database)
         '''
-        db = pymysql.connect("localhost", "root", "czy888", "test")
+        db = pymysql.connect("localhost", "root", password, "test")
         cursor = db.cursor()
         sql = "select * from user_config where username='"+current_user+"';"
         cursor.execute(sql)
@@ -314,7 +316,7 @@ def login():
         print user
         print psd
         # Open database connection
-        db = pymysql.connect("localhost", "root", "czy888", "test")
+        db = pymysql.connect("localhost", "root", password, "test")
         # prepare a cursor object using cursor() method
         cursor = db.cursor()
         # execute SQL query using execute() method.
@@ -340,7 +342,7 @@ def register():
         psd = register_form.data['psd']
 
         # Open database connection
-        db = pymysql.connect("localhost", "root", "czy888", "test")
+        db = pymysql.connect("localhost", "root", password, "test")
         # prepare a cursor object using cursor() method
         cursor = db.cursor()
         # execute SQL query using execute() method.
@@ -375,7 +377,7 @@ def save_config():
     if not check_filepath():
         return "not enough files!"
     # Open database connection
-    db = pymysql.connect("localhost", "root", "czy888", "test")
+    db = pymysql.connect("localhost", "root", password, "test")
     # prepare a cursor object using cursor() method
     cursor = db.cursor()
     sql = "INSERT INTO config_file(res_file, \
