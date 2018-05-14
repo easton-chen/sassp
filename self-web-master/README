@@ -1,1 +1,11 @@
 Self-adaptive Software Construct Platform
+
+
+
+tables in databases:
+
+admin_tbl(id, name, psd)
+
+config_file(configID, res_file, property_file, goal_file, software_file) 
+
+user_config(username, configID, id)

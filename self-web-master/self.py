@@ -50,6 +50,9 @@ file_path = {}
 def view_environment_main():
     all_config_file = []
     if(current_user != ''):
+        '''
+        pymysql.connect(host,user,password,database)
+        '''
         db = pymysql.connect("localhost", "root", "czy888", "test")
         cursor = db.cursor()
         sql = "select * from user_config where username='"+current_user+"';"
