@@ -1,18 +1,18 @@
 {% extends 'base.html' %} {% block title %}setting_list{% endblock %} {% block content %}
 <div class="am-cf am-padding">
-    <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">配置详情</strong> / <small>setting_list</small></div>
+    <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">config detail</strong> / <small>setting the configuration detail</small></div>
 </div>
 <div class="am-cf am-padding">
     <div class="am-fl am-cf">
-        配置名称：{{ environment_name }}
+        config name：{{ environment_name }}
     </div>
 </div>
 <div class="am-tabs am-margin" data-am-tabs>
     <ul class="am-tabs-nav am-nav am-nav-tabs">
-        <li class="am-active"><a href="#tab1">资源列表</a></li>
-        <li><a href="#tab2">系统属性列表</a></li>
-        <li><a href="#tab3">目标列表</a></li>
-        <li><a href="#tab4">软件特征列表</a></li>
+        <li class="am-active"><a href="#tab1">environment list</a></li>
+        <li><a href="#tab2">property list</a></li>
+        <li><a href="#tab3">goal list</a></li>
+        <li><a href="#tab4">software feature list</a></li>
     </ul>
     <div class="am-tabs-bd">
         <div class="am-tab-panel am-fade am-in am-active" id="tab1">
@@ -29,8 +29,8 @@
                 <form method="post" action="/add_res_from_file" name="fileform" id="fileform" enctype="multipart/form-data" class="am-form">
                     <div class="am-form-group am-form-file">
                         <button type="button" class="am-btn am-btn-default am-btn-xs">
-                            <i class="am-icon-cloud-upload"></i> 点击选择文件</button>
-                        <input type="file" name="res_file" id="res_file" value="选择" onSelect="this.fileform.submit();" class="am-form-field" required/>
+                            <i class="am-icon-cloud-upload"></i> choose file...</button>
+                        <input type="file" name="res_file" id="res_file" value="choose" onSelect="this.fileform.submit();" class="am-form-field" required/>
                     </div>
                     <div id="res-file-list"></div>
                     <script>
@@ -45,7 +45,7 @@
                     });
                     </script>
                     <div class="am-cf ">
-                        <input type="submit" name="submit" value="上传" class="am-btn am-btn-secondary am-btn-xs " />
+                        <input type="submit" name="submit" value="upload" class="am-btn am-btn-secondary am-btn-xs " />
                     </div>
                 </form>
             </div>
@@ -64,8 +64,8 @@
                 <form method="post" action="/add_property_from_file" name="fileform" id="fileform" enctype="multipart/form-data" class="am-form">
                     <div class="am-form-group am-form-file">
                         <button type="button" class="am-btn am-btn-default am-btn-xs">
-                            <i class="am-icon-cloud-upload"></i> 点击选择文件</button>
-                        <input type="file" name="property_file" id="property_file" value="选择" onSelect="this.fileform.submit();" class="am-form-field" required/>
+                            <i class="am-icon-cloud-upload"></i> choose file...</button>
+                        <input type="file" name="property_file" id="property_file" value="choose" onSelect="this.fileform.submit();" class="am-form-field" required/>
                     </div>
                     <div id="property-file-list"></div>
                     <script>
@@ -80,7 +80,7 @@
                     });
                     </script>
                     <div class="am-cf ">
-                        <input type="submit" name="submit" value="上传" class="am-btn am-btn-secondary am-btn-xs " />
+                        <input type="submit" name="submit" value="upload" class="am-btn am-btn-secondary am-btn-xs " />
                     </div>
                 </form>
             </div>
@@ -99,8 +99,8 @@
                 <form method="post" action="/add_goal_from_file" name="fileform" id="fileform" enctype="multipart/form-data" class="am-form">
                     <div class="am-form-group am-form-file">
                         <button type="button" class="am-btn am-btn-default am-btn-xs">
-                            <i class="am-icon-cloud-upload"></i> 点击选择文件</button>
-                        <input type="file" name="goal_file" id="goal_file" value="选择" onSelect="this.fileform.submit();" class="am-form-field" required/>
+                            <i class="am-icon-cloud-upload"></i> choose file...</button>
+                        <input type="file" name="goal_file" id="goal_file" value="choose" onSelect="this.fileform.submit();" class="am-form-field" required/>
                     </div>
                     <div id="goal-file-list"></div>
                     <script>
@@ -115,7 +115,7 @@
                     });
                     </script>
                     <div class="am-cf ">
-                        <input type="submit" name="submit" value="上传" class="am-btn am-btn-secondary am-btn-xs " />
+                        <input type="submit" name="submit" value="upload" class="am-btn am-btn-secondary am-btn-xs " />
                     </div>
                 </form>
             </div>
@@ -134,8 +134,8 @@
                 <form method="post" action="/add_software_from_file" name="fileform" id="fileform" enctype="multipart/form-data" class="am-form">
                     <div class="am-form-group am-form-file">
                         <button type="button" class="am-btn am-btn-default am-btn-xs">
-                            <i class="am-icon-cloud-upload"></i> 点击选择文件</button>
-                        <input type="file" name="software_file" id="software_file" value="选择" onSelect="this.fileform.submit();" class="am-form-field" required/>
+                            <i class="am-icon-cloud-upload"></i> choose file...</button>
+                        <input type="file" name="software_file" id="software_file" value="choose" onSelect="this.fileform.submit();" class="am-form-field" required/>
                     </div>
                     <div id="software-file-list"></div>
                     <script>
@@ -150,7 +150,7 @@
                     });
                     </script>
                     <div class="am-cf ">
-                        <input type="submit" name="submit" value="上传" class="am-btn am-btn-secondary am-btn-xs " />
+                        <input type="submit" name="submit" value="upload" class="am-btn am-btn-secondary am-btn-xs " />
                     </div>
                 </form>
             </div>
@@ -158,11 +158,11 @@
     </div>
 </div>
 <div>
-    <input type="button" onclick="save_config()" value="确认">
+    <input type="button" onclick="save_config()" value="confirm">
 </div>
 <script type="text/javascript">
     function save_config(){
-        var r=confirm("保存配置？");
+        var r=confirm("save config？");
         if (r==true)
         {
             var xmlhttp;
