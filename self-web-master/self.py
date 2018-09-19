@@ -17,10 +17,13 @@ from flask_wtf import Form
 from wtforms import StringField,SubmitField,PasswordField
 from wtforms.validators import DataRequired
 
+import flask_login
+from user_manager import User, User_manager
+
 import pymysql
 
 class MyForm(Form):
-    user = StringField('Username', validators=[DataRequired()])
+    username = StringField('Username', validators=[DataRequired()])
     psd = PasswordField('Password',validators=[DataRequired()])
     submit = SubmitField('submit')
 
@@ -30,7 +33,13 @@ ALLOWED_EXTENSIONS = set(['json'])
 
 
 app = Flask(__name__)
+login_manager = flask_login.LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+login_manager.login_message = 'please login!'
+login_manager.session_protection = 'strong'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['SECRET_KEY']='justastring'
 
 res_rule_id = 0
 goal_list = []
@@ -42,22 +51,23 @@ show_goal = []
 show_software = []
 show_property = []
 show_environment = []
-current_user = ''
+#current_user = ''
 file_path = {}
-password = "******"
+password = "czy888"
 
 @app.route('/')
 @app.route('/environment_main')
 def view_environment_main():
     all_config_file = []
 
-    if(current_user != ''):
+    #print flask_login.current_user
+    if(flask_login.current_user.is_authenticated):
         '''
         pymysql.connect(host,user,password,database)
         '''
         db = pymysql.connect("localhost", "root", password, "test")
         cursor = db.cursor()
-        sql = "select * from user_config where username='"+current_user+"';"
+        sql = "select * from user_config where username='" + flask_login.current_user.username + "';"
         cursor.execute(sql)
         all_user_config = cursor.fetchall()
         #print all_config
@@ -70,7 +80,7 @@ def view_environment_main():
         config_result=cursor.fetchall()
         for row in config_result:
             config_line ={}
-            config_line['username'] = current_user
+            config_line['username'] = flask_login.current_user.username
             config_line['configID'] = row[0]
             config_line['res_file'] = row[1]
             config_line['property_file'] = row[2]
@@ -311,34 +321,37 @@ def op_get_goal_values():
 def login():
     login_form = MyForm(csrf_enabled=False)
     if login_form.validate_on_submit():
-        user = login_form.data['user']
+        username = login_form.data['username']
         psd = login_form.data['psd']
-        print user
+        print username
         print psd
-        # Open database connection
-        db = pymysql.connect("localhost", "root", password, "test")
-        # prepare a cursor object using cursor() method
-        cursor = db.cursor()
-        # execute SQL query using execute() method.
-        sql = "select psd from admin_tbl \
-            where name = '%s';" % user
-        cursor.execute(sql)
-        # Fetch a single row using fetchone() method.
-        cor_psd = cursor.fetchone()
-        #print cor_psd[0]
-        if cor_psd != None and psd == cor_psd[0]:
-            global  current_user
-            current_user = user
-            return redirect(url_for('view_environment_main'))
+
+        res = User_manager.authorize(username, psd)
+        if res[0]:
+            user = res[1]
+            flask_login.login_user(user)
+            next_url = request.args.get("next")
+            print flask_login.current_user
+            return redirect(next_url or url_for('view_environment_main'))
+
+
+            #return redirect(url_for('view_environment_main'))
         else:
             return render_template('login.html',message='Bad username or password',form=login_form,name_cn=u'登录',name_en='login')
     return render_template('login.html',form=login_form,name_cn=u'登录',name_en='login')
+
+@app.route('/logout')
+@flask_login.login_required
+def logout():
+    # remove the username from the session if it's there
+    flask_login.logout_user()
+    return redirect(url_for('login'))
 
 @app.route('/register',methods=['GET','POST'])
 def register():
     register_form = MyForm(csrf_enabled=False)
     if register_form.validate_on_submit():
-        user = register_form.data['user']
+        username = register_form.data['username']
         psd = register_form.data['psd']
 
         # Open database connection
@@ -347,7 +360,7 @@ def register():
         cursor = db.cursor()
         # execute SQL query using execute() method.
         sql = "select psd from admin_tbl \
-            where name = '%s';" % user
+            where name = '%s';" % username
         cursor.execute(sql)
         # Fetch a single row using fetchone() method.
         if cursor.fetchone() != None:
@@ -357,7 +370,7 @@ def register():
                   (name,psd) \
                   values \
                   ('%s','%s');" % \
-                  (user,psd)
+                  (username,psd)
             print sql
             try:
                 # 执行sql语句
@@ -393,13 +406,13 @@ def save_config():
         # Rollback in case there is any error
         db.rollback()
    # print sql
-    if current_user == '':
+    if flask_login.current_user == '':
         return "not login"
     sql = "select configID from config_file\
         where configID = (select max(configID) from config_file);"
     cursor.execute(sql)
     configID = cursor.fetchone()
-    sql = "insert into user_config(username, configID) values ('"+current_user+"',"+str(configID[0])+");"
+    sql = "insert into user_config(username, configID) values ('" + flask_login.current_user + "'," + str(configID[0]) + ");"
     try:
         cursor.execute(sql)
         db.commit()
@@ -453,6 +466,10 @@ def use_config():
         show_software = get_show_software(software_data)
         get_software_list(show_software)
     return "ok"
+
+@login_manager.user_loader
+def load_user(user_id):
+        return User_manager.get(user_id)
 
 
 if __name__ == '__main__':
