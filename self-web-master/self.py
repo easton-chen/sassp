@@ -82,12 +82,18 @@ def view_environment_main():
             config_line ={}
             config_line['username'] = flask_login.current_user.username
             config_line['configID'] = row[0]
-            config_line['res_file'] = row[1]
-            config_line['property_file'] = row[2]
-            config_line['goal_file'] = row[3]
-            config_line['software_file'] = row[4]
+            config_line['res_file'] = trim_filename(row[1])
+            config_line['property_file'] = trim_filename(row[2])
+            config_line['goal_file'] = trim_filename(row[3])
+            config_line['software_file'] = trim_filename(row[4])
             all_config_file.append(config_line)
     return render_template('environment_main.html',config_file=all_config_file)
+
+def trim_filename(filename):
+    new_filename = filename[::-1]
+    new_filename = new_filename.split('/')[0]
+    new_filename = new_filename[::-1]
+    return new_filename
 
 @app.route('/environment_list')
 def view_environment_list():
@@ -333,7 +339,6 @@ def login():
             next_url = request.args.get("next")
             print flask_login.current_user
             return redirect(next_url or url_for('view_environment_main'))
-
 
             #return redirect(url_for('view_environment_main'))
         else:
