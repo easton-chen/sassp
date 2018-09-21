@@ -15,15 +15,11 @@ sh run-tuplespace.sh
 python ./sassp/self-web-master/ResPool/res_pool.py	
 ```
 
-*python version: 2.7*
-
 3.run self.py
 
 ```bash
 python ./sassp/self-web-master/self.py
 ```
-
-*python version: 2.7*
 
 4.run test_agent.py
 
@@ -31,15 +27,14 @@ python ./sassp/self-web-master/self.py
 python ./sassp/self-web-master/test_agent.py
 ```
 
-*python version: 2.7*
-
 5.visit `localhost:5000` to get access to the website
 
 ## module dependency
 
 - java
-- python
+- python2.7
 - flask
 - flask-wtf
+- flask_login
 - mysql
 - pymysql

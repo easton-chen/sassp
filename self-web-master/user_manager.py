@@ -9,8 +9,8 @@ class User(UserMixin):
     def __repr__(self):
         return '<User %r>' % self.username
 
-class User_manager:
-    db_psd = 'czy888'
+class UserManager:
+    db_psd = ''
     db_name = 'test'
     def __init__(self):
         pass

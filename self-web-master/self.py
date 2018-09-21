@@ -18,7 +18,7 @@ from wtforms import StringField,SubmitField,PasswordField
 from wtforms.validators import DataRequired
 
 import flask_login
-from user_manager import User, User_manager
+from user_manager import User, UserManager
 
 import pymysql
 
@@ -53,7 +53,7 @@ show_property = []
 show_environment = []
 #current_user = ''
 file_path = {}
-password = "czy888"
+password = ""
 
 @app.route('/')
 @app.route('/environment_main')
@@ -332,7 +332,7 @@ def login():
         print username
         print psd
 
-        res = User_manager.authorize(username, psd)
+        res = UserManager.authorize(username, psd)
         if res[0]:
             user = res[1]
             flask_login.login_user(user)
@@ -474,7 +474,7 @@ def use_config():
 
 @login_manager.user_loader
 def load_user(user_id):
-        return User_manager.get(user_id)
+        return UserManager.get(user_id)
 
 
 if __name__ == '__main__':
