@@ -12,6 +12,7 @@ from werkzeug import secure_filename
 from ResPool import client, res_manager, utils, Xutils
 import json
 from contextlib import closing
+from urlparse import urlparse, urljoin
 
 from flask_wtf import Form
 from wtforms import StringField,SubmitField,PasswordField
@@ -39,7 +40,7 @@ login_manager.login_view = 'login'
 login_manager.login_message = 'please login!'
 login_manager.session_protection = 'strong'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['SECRET_KEY']='justastring'
+app.config['SECRET_KEY'] = 'justastring'
 
 res_rule_id = 0
 goal_list = []
@@ -59,12 +60,11 @@ password = ""
 @app.route('/environment_main')
 def view_environment_main():
     all_config_file = []
-
-    #print flask_login.current_user
+    '''
     if(flask_login.current_user.is_authenticated):
-        '''
-        pymysql.connect(host,user,password,database)
-        '''
+        
+        #pymysql.connect(host,user,password,database)
+        
         db = pymysql.connect("localhost", "root", password, "test")
         cursor = db.cursor()
         sql = "select * from user_config where username='" + flask_login.current_user.username + "';"
@@ -87,7 +87,8 @@ def view_environment_main():
             config_line['goal_file'] = trim_filename(row[3])
             config_line['software_file'] = trim_filename(row[4])
             all_config_file.append(config_line)
-    return render_template('environment_main.html',config_file=all_config_file)
+    '''
+    return render_template('environment_main.html')
 
 def trim_filename(filename):
     new_filename = filename[::-1]
@@ -105,8 +106,23 @@ def view_environment_list():
 def view_agent_choose():
     return render_template('agent_choose.html')
 
-@app.route('/runtime_choose')
+@app.route('/add_agent_file', methods=['POST'])
+def op_add_agent_file():
+    file = request.files['agent']
+    if file:
+        filename = secure_filename(file.filename)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(filepath)
+        cmd = 'python ' + filename + ' &'
+        #print 'cmd: ',cmd
+        res = os.system(cmd)
+        #print 'res:', res
+    return render_template('runtime.html')
+
+@app.route('/config_choose')
+@flask_login.login_required
 def view_choose():
+    '''
     cur = g.db.execute('select distinct environment from entries')
     environments = [row for row in cur.fetchall()]
     entries = []
@@ -115,7 +131,37 @@ def view_choose():
         print i
         num = g.db.execute('select count(*) from entries where environment = (?)', [i]).fetchall()[0][0]
         entries.append([i,num])
-    return render_template('runtime_choose.html', entries=entries)
+    '''
+    all_config_file = []
+
+    if (flask_login.current_user.is_authenticated):
+        '''
+        pymysql.connect(host,user,password,database)
+        '''
+        db = pymysql.connect("localhost", "root", password, "test")
+        cursor = db.cursor()
+        sql = "select * from user_config where username='" + flask_login.current_user.username + "';"
+        cursor.execute(sql)
+        all_user_config = cursor.fetchall()
+        # print all_config
+        configID = []
+        for rows in all_user_config:
+            configID.append(rows[1])
+        sql = "select * from config_file where configID in " + str(tuple(configID)) + ";"
+        # print sql
+        cursor.execute(sql)
+        config_result = cursor.fetchall()
+        for row in config_result:
+            config_line = {}
+            config_line['username'] = flask_login.current_user.username
+            config_line['configID'] = row[0]
+            config_line['res_file'] = trim_filename(row[1])
+            config_line['property_file'] = trim_filename(row[2])
+            config_line['goal_file'] = trim_filename(row[3])
+            config_line['software_file'] = trim_filename(row[4])
+            all_config_file.append(config_line)
+    return render_template('config_choose.html',config_file=all_config_file)
+
 
 @app.route('/set_environment', methods=['POST'])
 def op_set_environment():
@@ -323,6 +369,11 @@ def op_get_goal_values():
         })
     return json.dumps(ret)
 
+def is_safe_url(target):
+    ref_url = urlparse(request.host_url)
+    test_url = urlparse(urljoin(request.host_url, target))
+    return test_url.scheme in ('http', 'https') and ref_url.netloc == test_url.netloc
+
 @app.route('/login',methods=['GET','POST'])
 def login():
     login_form = MyForm(csrf_enabled=False)
@@ -338,12 +389,17 @@ def login():
             flask_login.login_user(user)
             next_url = request.args.get("next")
             print flask_login.current_user
+            '''
+            this function does not work
+            if not is_safe_url(next):
+                return abort(400)
+            '''
             return redirect(next_url or url_for('view_environment_main'))
 
             #return redirect(url_for('view_environment_main'))
         else:
-            return render_template('login.html',message='Bad username or password',form=login_form,name_cn=u'登录',name_en='login')
-    return render_template('login.html',form=login_form,name_cn=u'登录',name_en='login')
+            return render_template('login.html',message='Bad username or password',form=login_form,name_short='login',name_long='login your account')
+    return render_template('login.html',form=login_form,name_short='login',name_long='login your account')
 
 @app.route('/logout')
 @flask_login.login_required
@@ -369,7 +425,7 @@ def register():
         cursor.execute(sql)
         # Fetch a single row using fetchone() method.
         if cursor.fetchone() != None:
-            return render_template('login.html', message='username has existed', form=register_form,name_cn=u'注册',name_en='register')
+            return render_template('login.html', message='username has existed', form=register_form,name_short='register',name_long='register your account')
         else:
             sql = "insert into admin_tbl \
                   (name,psd) \
@@ -387,7 +443,7 @@ def register():
                 db.rollback()
 
             return render_template('environment_main.html')
-    return render_template('login.html',form=register_form,name_cn=u'注册',name_en='register')
+    return render_template('login.html',form=register_form,name_short='register',name_long='register your account')
 
 @app.route('/save_config',methods=['GET'])
 def save_config():
@@ -437,10 +493,11 @@ def check_filepath():
 def use_config():
     #print "reach use_config"
     #print request.args
-    res_file_path=request.args.get('res_file')
-    property_file_path = request.args.get('property_file')
-    goal_file_path = request.args.get('goal_file')
-    software_file_path = request.args.get('software_file')
+    res_file_path = UPLOAD_FOLDER + '/' + request.args.get('res_file')
+    property_file_path = UPLOAD_FOLDER + '/' + request.args.get('property_file')
+    goal_file_path = UPLOAD_FOLDER + '/' + request.args.get('goal_file')
+    software_file_path = UPLOAD_FOLDER + '/' + request.args.get('software_file')
+
     res_list = Xutils.get_res_list_from_environment_json(res_file_path)
     for res in res_list:
         print res

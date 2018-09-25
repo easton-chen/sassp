@@ -3,10 +3,10 @@
     <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">agent choose</strong> / <small>agent_choose</small></div>
 </div>
 <div class="am-margin">
-    <form method="post" action="/agent_choose" name="fileform" id="fileform" enctype="multipart/form-data" class="am-form">
+    <form method="post" action="/add_agent_file" name="fileform" id="fileform" enctype="multipart/form-data" class="am-form">
         <div class="am-form-group am-form-file">
             <button type="button" class="am-btn am-btn-default am-btn-xs">
-                <i class="am-icon-cloud-upload"></i> 点击选择agent设定文件</button>
+                <i class="am-icon-cloud-upload"></i> click to choose agent file</button>
             <input type="file" name="agent" id="agent" value="选择" onSelect="this.fileform.submit();"  class="am-form-field" required/>
         </div>
         <div id="file-list"></div>
@@ -22,7 +22,7 @@
         });
         </script>
         <div class="am-cf ">
-            <input type="submit" name="submit" value="上传agent" class="am-btn am-btn-secondary am-btn-xs " />
+            <input type="submit" name="submit" value="upload agent" class="am-btn am-btn-secondary am-btn-xs " />
         </div>
     </form>
 </div>

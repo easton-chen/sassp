@@ -2,39 +2,7 @@
 <div class="am-cf am-padding">
     <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">specify config</strong> / <small>set your configuration</small></div>
 </div>
-<table class="am-table am-table-striped am-table-hover am-padding">
-    <thead>
-        <tr>
-            <th class="table-title">user</th>
-            <th class="table-type">configID</th>
-            <th class="table-type">res_file</th>
-            <th class="table-type">property_file</th>
-            <th class="table-type">goal_file</th>
-            <th class="table-type">software_file</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for line in config_file %}
-        <tr>
-            <td>{{ line.username }}</td>
-            <td>{{ line.configID }}</td>
-            <td>{{ line.res_file }}</td>
-            <td>{{ line.property_file }}</td>
-            <td>{{ line.goal_file }}</td>
-            <td>{{ line.software_file }}</td>
-            <td>
-                <div class="am-btn-toolbar">
-                    <div class="am-btn-group am-btn-group-xs">
-                        <!--<button class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="jump_list('{{ name }}')"><span class="am-icon-pencil-square-o"></span> 编辑</button>-->
-                        <button class="am-btn am-btn-default am-btn-xs" onclick="choose_config('{{line.res_file}}','{{line.property_file}}','{{line.goal_file}}','{{line.software_file}}')"><span class="am-icon-pencil-square-o"></span> choose</button>
-                        <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-trash-o"></span> delete</button>
-                    </div>
-                </div>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+
 <div class="am-margin ">
     <button type="button" class="am-btn am-btn-primary am-btn-xs" onclick="location='environment_list?environment_name='+input_environment_name.value">new</button>
     <input type="text" class="am-input-sm" id="input_environment_name">
